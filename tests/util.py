@@ -16,7 +16,7 @@ class ReportedMessage:
     message: str
 
     @staticmethod
-    def from_raw(report: str):
+    def from_raw(report: str) -> "ReportedMessage":
         m = re.match(r"(.*?):(\d+):(\d+): ((?:\w|\d)+) (.*)", report)
         return ReportedMessage(m[1], int(m[2]), int(m[3]), m[4], m[5])
 
@@ -26,15 +26,20 @@ class BaseTest(abc.ABC):
     def error_code(self) -> str:
         raise NotImplementedError
 
+    @abc.abstractmethod
+    def activate_flag(self) -> str:
+        raise NotImplementedError
+
     @pytest.fixture(autouse=True)
     def _flake8dir(self, flake8dir):
         self.flake8dir = flake8dir
 
     def run_flake8(self, code: str) -> List[ReportedMessage]:
         self.flake8dir.make_example_py(textwrap.dedent(code))
-        args = [f"--select_clst1={self.error_code()}"]
+        args = [self.activate_flag()]
         result = self.flake8dir.run_flake8(args)
-        return [ReportedMessage.from_raw(report) for report in result.out_lines]
+        all_errors = [ReportedMessage.from_raw(report) for report in result.out_lines]
+        return [err for err in all_errors if err.code.startswith("TYCO")]
 
     def assert_error_at(
         self,

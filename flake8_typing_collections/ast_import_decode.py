@@ -13,10 +13,11 @@ of the object in question.
 import ast
 import collections
 import itertools
-from typing import Optional, List, Iterable, Sequence, Dict
+from typing import List, Iterable, Sequence, Dict, Union
 
 
-def decode(whole_tree: ast.AST, node_in_question: ast.Name) -> str:
+
+def decode(whole_tree: ast.AST, node_in_question: Union[ast.Name, ast.Attribute]) -> str:
     """
     Decodes the object in question.
 
@@ -31,46 +32,58 @@ def decode(whole_tree: ast.AST, node_in_question: ast.Name) -> str:
     The function is not attempting to be "perfect". For example, if the
     identifier in question is defined multiple times, the decoder will
     not try to work out which of those definitions is the most recent
-    to the :class:`ast.Name` node, even if it would be possible.
+    to the node, even if it would be possible.
 
     One exception is a heuristic applied on "try-catch" constructs: for these,
     the checker always assume for the "try" to succeed and skips "catch"
     segments.
 
     :param whole_tree: The entire AST in which the node is contained in.
-    :param node_in_question: The node of type :class:`ast.Name` that is to be decoded.
-    :return: The complete name of the given identifier as a string. If no
-     better match can be found, the name stored within the :class:`ast.Name`
-     node is returned.
+    :param node_in_question: The node of type :class:`ast.Name` or :class:`ast.Attribute`, that is to be decoded.
+    :return: The complete name of the given identifier as a string. If no better match can be found, the name stored within the :class:`ast.Name` node is returned.
+    :raises: The node in question and all its descendents must be of type :class:`ast.Name` or :class:`ast.Attribute`, otherwise a :class:`TypeError` will be raised.
     """
+    node_id = _build_node_identifier(node_in_question)
     ancestors = _ast_ancestors(whole_tree, node_in_question)
     statements_to_analyze = list(_relevant_statements(ancestors))
-    return _analyze(statements_to_analyze).get(
-        node_in_question.id, node_in_question.id
-    )
+    return _analyze(statements_to_analyze).get(node_id, node_id)
 
+
+def _build_node_identifier(node: Union[ast.Name, ast.Attribute]) -> str:
+    """
+    Converts a named node to a string.
+
+    For nodes of type :class:`ast.Name`, this is simple. For nodes of type
+    :class:`ast.Attribute`, the different attribute parts have to be
+    concatenated.
+
+    :param node: The node to be converted.
+    :return: The name that is represented by the node, as a string.
+    """
+    if isinstance(node, ast.Name):
+        return node.id
+    elif isinstance(node, ast.Attribute):
+        return _build_node_identifier(node.value) + "." + node.attr
+    else:
+        raise TypeError("Can only decode nodes of type ast.Name and ast.Attribute.")
 
 def _ast_ancestors(tree: ast.AST, node: ast.AST) -> List[ast.AST]:
     """
     Finds a list of ancestors from a given node to its root.
 
-    ``tree`` must be an ancestor of ``node``, i.e. ``node`` must be contained
-    in ``ast.walk(tree)``. Otherwise, a :class:`KeyError` is raised.
-
     :param tree: The root of the given ast.
     :param node: A node within the given ast.
-    :return: A list of nodes such that the first value is ``node``,
-     the last value is ``tree``, and each list element is a child node
-     of its successive element.
+    :return: A list of nodes such that the first value is ``node``, the last value is ``tree``, and each list element is a child node of its successive element.
+    :raises: ``tree`` must be an ancestor of ``node``, i.e. ``node`` must be containedi in ``ast.walk(tree)``. Otherwise, a :class:`KeyError` is raised.
     """
     parent_map = {}
     for parent in ast.walk(tree):
         for child in ast.iter_child_nodes(parent):
             parent_map[child] = parent
-    ancestors = []
+    ancestors = [node]
     while node != tree:
-        ancestors.append(node)
         node = parent_map[node]
+        ancestors.append(node)
     return ancestors
 
 
@@ -99,6 +112,9 @@ def _relevant_statements(ancestors: List[ast.AST]) -> Iterable[ast.AST]:
                         yield grandchild
 
 
+
+
+
 def _analyze(statements: Sequence[ast.AST]) -> Dict[str, str]:
     """
     Analyzes the given list of statements for all possible identifiers.
@@ -117,11 +133,11 @@ def _analyze(statements: Sequence[ast.AST]) -> Dict[str, str]:
                 potential_aliases[statement.target.id].append(
                     statement.value.id
                 )
-        elif isinstance(statement, ast.ImportFrom):
+        elif isinstance(statement, ast.Import):
             for alias in statement.names:
                 if alias.asname is not None:
                     potential_aliases[alias.asname].append(alias.name)
-        elif isinstance(statement, ast.Import):
+        elif isinstance(statement, ast.ImportFrom):
             for alias in statement.names:
                 if alias.asname is None:
                     potential_aliases[alias.name].append(
