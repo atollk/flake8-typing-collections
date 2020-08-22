@@ -19,19 +19,17 @@ class Test_TYCO117(BaseTest):
 
     def test_fail_1(self):
         code = """
-        import 
-        def foo(x: .frozenset):
+        def foo(x: frozenset):
             ...
         """
         result = self.run_flake8(code)
-        self.assert_error_at(result, "TYCO117", 2, 12)
+        self.assert_error_at(result, "TYCO117", 1, 12)
 
 
     def test_fail_2(self):
         code = """
-        from  import frozenset
         def foo(x) -> frozenset:
             ...
         """
         result = self.run_flake8(code)
-        self.assert_error_at(result, "TYCO117", 2, 15)
+        self.assert_error_at(result, "TYCO117", 1, 15)

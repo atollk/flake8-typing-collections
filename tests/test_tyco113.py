@@ -6,7 +6,7 @@ class Test_TYCO113(BaseTest):
         return "TYCO113"
 
     def activate_flag(self) -> str:
-        return "--tyco_generic_alt"
+        return "--tyco_alias_alt"
 
     def test_pass_1(self):
         code = """
@@ -19,19 +19,17 @@ class Test_TYCO113(BaseTest):
 
     def test_fail_1(self):
         code = """
-        import 
-        def foo(x: .bytes):
+        def foo(x: bytes):
             ...
         """
         result = self.run_flake8(code)
-        self.assert_error_at(result, "TYCO113", 2, 12)
+        self.assert_error_at(result, "TYCO113", 1, 12)
 
 
     def test_fail_2(self):
         code = """
-        from  import bytes
         def foo(x) -> bytes:
             ...
         """
         result = self.run_flake8(code)
-        self.assert_error_at(result, "TYCO113", 2, 15)
+        self.assert_error_at(result, "TYCO113", 1, 15)

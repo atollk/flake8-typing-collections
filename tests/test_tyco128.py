@@ -19,19 +19,17 @@ class Test_TYCO128(BaseTest):
 
     def test_fail_1(self):
         code = """
-        import 
-        def foo(x: .dict):
+        def foo(x: dict):
             ...
         """
         result = self.run_flake8(code)
-        self.assert_error_at(result, "TYCO128", 2, 12)
+        self.assert_error_at(result, "TYCO128", 1, 12)
 
 
     def test_fail_2(self):
         code = """
-        from  import dict
         def foo(x) -> dict:
             ...
         """
         result = self.run_flake8(code)
-        self.assert_error_at(result, "TYCO128", 2, 15)
+        self.assert_error_at(result, "TYCO128", 1, 15)

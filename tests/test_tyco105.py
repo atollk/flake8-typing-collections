@@ -6,7 +6,7 @@ class Test_TYCO105(BaseTest):
         return "TYCO105"
 
     def activate_flag(self) -> str:
-        return "--tyco_generic_alt"
+        return "--tyco_alias_alt"
 
     def test_pass_1(self):
         code = """

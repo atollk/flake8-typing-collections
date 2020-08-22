@@ -19,49 +19,50 @@ class Flags:
     alias_alt: bool
     general_args: bool
 
+ERROR_CODES_GENERIC_ALT = {100, 101, 102, 103, 106, 107, 108, 109, 110, 111, 112, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132}
+ERROR_CODES_ALIAS_ALT = {104, 105, 113}
+ERROR_CODES_GENERAL_ARGS = {200, 201, 202}
+
 
 DEFAULT_FLAGS = Flags(generic_alt=True, alias_alt=False, general_args=True)
 
 BETTER_ALTERNATIVES = {
-    100: {"collections.abc.Iterable": "typing.Iterable"},
-    101: {"collections.abc.Iterator": "typing.Iterator"},
-    102: {"collections.abc.Reversible": "typing.Reversible"},
-    103: {"collections.abc.Container": "typing.Container"},
-    104: {"collections.abc.Hashable": "typing.Hashable"},
-    105: {"collections.abc.Sized": "typing.Sized"},
-    106: {"collections.abc.Collection": "typing.Collection"},
-    107: {"collections.abc.Set": "typing.AbstractSet"},
-    108: {"collections.abc.MutableSet": "typing.MutableSet"},
-    109: {"collections.abc.Mapping": "typing.Mapping"},
-    110: {"collections.abc.MutableMapping": "typing.MutableMapping"},
-    111: {"collections.abc.Sequence": "typing.Sequence"},
-    112: {"collections.abc.MutableSequence": "typing.MutableSequence"},
-    113: {"bytes": "typing.ByteString"},
-    114: {"collections.Deque": "typing.Deque"},
-    115: {"list": "typing.List"},
-    116: {"set": "typing.Set"},
-    117: {"frozenset": "typing.FrozenSet"},
-    118: {"collections.abc.MappingView": "typing.MappingView"},
-    119: {"collections.abc.KeysView": "typing.KeysView"},
-    120: {"collections.abc.ItemsView": "typing.ItemsView"},
-    121: {"collections.abc.ValuesView": "typing.ValuesView"},
-    122: {"collections.abc.Awaitable": "typing.Awaitable"},
-    123: {"collections.abc.Coroutine": "typing.Coroutine"},
-    124: {"collections.abc.AsyncIterable": "typing.AsyncIterable"},
-    125: {"collections.abc.AsyncIterator": "typing.AsyncIterator"},
-    126: {"contextlib.AbstractContextManager": "typing.ContextManager"},
-    127: {
-        "contextlib.AbstractAsyncContextManager",
-        "typing.AsyncContextManager",
-    },
-    128: {"dict": "typing.Dict"},
-    129: {"collections.defaultdict": "typing.DefaultDict"},
-    130: {"collections.OrderedDict": "typing.OrderedDict"},
-    131: {"collections.Counter": "typing.Counter"},
-    132: {"collections.ChainMap": "typing.ChainMap"},
-    200: {},
-    201: {},
-    202: {},
+    100: ['collections.abc.Iterable'],
+    101: ['collections.abc.Iterator'],
+    102: ['collections.abc.Reversible'],
+    103: ['collections.abc.Container'],
+    104: ['collections.abc.Hashable'],
+    105: ['collections.abc.Sized'],
+    106: ['collections.abc.Collection'],
+    107: ['collections.abc.Set'],
+    108: ['collections.abc.MutableSet'],
+    109: ['collections.abc.Mapping'],
+    110: ['collections.abc.MutableMapping'],
+    111: ['collections.abc.Sequence'],
+    112: ['collections.abc.MutableSequence'],
+    113: ['bytes'],
+    114: ['collections.Deque'],
+    115: ['list'],
+    116: ['set'],
+    117: ['frozenset'],
+    118: ['collections.abc.MappingView'],
+    119: ['collections.abc.KeysView'],
+    120: ['collections.abc.ItemsView'],
+    121: ['collections.abc.ValuesView'],
+    122: ['collections.abc.Awaitable'],
+    123: ['collections.abc.Coroutine'],
+    124: ['collections.abc.AsyncIterable'],
+    125: ['collections.abc.AsyncIterator'],
+    126: ['contextlib.AbstractContextManager'],
+    127: ['contextlib.AbstractAsyncContextManager'],
+    128: ['dict'],
+    129: ['collections.defaultdict'],
+    130: ['collections.OrderedDict'],
+    131: ['collections.Counter'],
+    132: ['collections.ChainMap'],
+    200: ["typing.List"],
+    201: ["typing.Set"],
+    202: ["typing.Dict"],
 }
 
 
@@ -154,6 +155,9 @@ class Checker:
     def _use_better_alternative(
         self, type_hint: ast.AST, error_code: int
     ) -> Iterable[Tuple[int, int, str, type]]:
+        if (error_code in ERROR_CODES_GENERIC_ALT and not self.flags.generic_alt) or (error_code in ERROR_CODES_ALIAS_ALT and not self.flags.alias_alt) or (error_code in ERROR_CODES_GENERAL_ARGS and not self.flags.general_args):
+            return []
+
         if isinstance(type_hint, ast.Name) or isinstance(type_hint, ast.Attribute):
             if (
                 ast_import_decode.decode(self.tree, type_hint)
