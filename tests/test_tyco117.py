@@ -1,5 +1,5 @@
-
 from tests.util import BaseTest
+
 
 class Test_TYCO117(BaseTest):
     def error_code(self) -> str:
@@ -24,7 +24,6 @@ class Test_TYCO117(BaseTest):
         """
         result = self.run_flake8(code)
         self.assert_error_at(result, "TYCO117", 1, 12)
-
 
     def test_fail_2(self):
         code = """

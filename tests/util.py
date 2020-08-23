@@ -22,7 +22,6 @@ class ReportedMessage:
 
 
 class BaseTest(abc.ABC):
-    @abc.abstractmethod
     def error_code(self) -> str:
         raise NotImplementedError
 
@@ -38,7 +37,9 @@ class BaseTest(abc.ABC):
         self.flake8dir.make_example_py(textwrap.dedent(code))
         args = [self.activate_flag()]
         result = self.flake8dir.run_flake8(args)
-        all_errors = [ReportedMessage.from_raw(report) for report in result.out_lines]
+        all_errors = [
+            ReportedMessage.from_raw(report) for report in result.out_lines
+        ]
         return [err for err in all_errors if err.code.startswith("TYCO")]
 
     def assert_error_at(

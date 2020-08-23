@@ -1,5 +1,5 @@
-
 from tests.util import BaseTest
+
 
 class Test_TYCO201(BaseTest):
     def error_code(self) -> str:

@@ -13,11 +13,12 @@ of the object in question.
 import ast
 import collections
 import itertools
-from typing import List, Iterable, Sequence, Dict, Union
+from typing import Dict, Iterable, List, Sequence, Union
 
 
-
-def decode(whole_tree: ast.AST, node_in_question: Union[ast.Name, ast.Attribute]) -> str:
+def decode(
+    whole_tree: ast.AST, node_in_question: Union[ast.Name, ast.Attribute]
+) -> str:
     """
     Decodes the object in question.
 
@@ -42,11 +43,25 @@ def decode(whole_tree: ast.AST, node_in_question: Union[ast.Name, ast.Attribute]
     :param node_in_question: The node of type :class:`ast.Name` or :class:`ast.Attribute`, that is to be decoded.
     :return: The complete name of the given identifier as a string. If no better match can be found, the name stored within the :class:`ast.Name` node is returned.
     :raises: The node in question and all its descendents must be of type :class:`ast.Name` or :class:`ast.Attribute`, otherwise a :class:`TypeError` will be raised.
+    :raises: If the node describes an empty identifier, a :class:`ValueError` is raised.
     """
-    node_id = _build_node_identifier(node_in_question)
+    node_id = _build_node_identifier(node_in_question).split(".")
+    if not node_id:
+        raise ValueError("Cannot decode an empty identifier.")
     ancestors = _ast_ancestors(whole_tree, node_in_question)
     statements_to_analyze = list(_relevant_statements(ancestors))
-    return _analyze(statements_to_analyze).get(node_id, node_id)
+    alias_dict = _analyze(statements_to_analyze)
+
+    for i in range(len(node_id)):
+        lhs = ".".join(node_id[: len(node_id) - i])
+        rhs = ".".join(node_id[len(node_id) - i :])
+        if lhs in alias_dict:
+            lhs = alias_dict[lhs]
+            break
+    if lhs and rhs:
+        return lhs + "." + rhs
+    else:
+        return lhs + rhs
 
 
 def _build_node_identifier(node: Union[ast.Name, ast.Attribute]) -> str:
@@ -65,7 +80,10 @@ def _build_node_identifier(node: Union[ast.Name, ast.Attribute]) -> str:
     elif isinstance(node, ast.Attribute):
         return _build_node_identifier(node.value) + "." + node.attr
     else:
-        raise TypeError("Can only decode nodes of type ast.Name and ast.Attribute.")
+        raise TypeError(
+            "Can only decode nodes of type ast.Name and ast.Attribute."
+        )
+
 
 def _ast_ancestors(tree: ast.AST, node: ast.AST) -> List[ast.AST]:
     """
@@ -112,9 +130,6 @@ def _relevant_statements(ancestors: List[ast.AST]) -> Iterable[ast.AST]:
                         yield grandchild
 
 
-
-
-
 def _analyze(statements: Sequence[ast.AST]) -> Dict[str, str]:
     """
     Analyzes the given list of statements for all possible identifiers.
@@ -127,28 +142,39 @@ def _analyze(statements: Sequence[ast.AST]) -> Dict[str, str]:
     :return: A dict mapping aliases to full names.
     """
     potential_aliases = collections.defaultdict(list)
+    assignments = []
     for statement in statements:
         if isinstance(statement, ast.Assign):
-            if isinstance(statement.value, ast.Name):
-                potential_aliases[statement.target.id].append(
-                    statement.value.id
-                )
+            assignments.append(statement)
         elif isinstance(statement, ast.Import):
             for alias in statement.names:
                 if alias.asname is not None:
                     potential_aliases[alias.asname].append(alias.name)
         elif isinstance(statement, ast.ImportFrom):
             for alias in statement.names:
+                fullname = (
+                    ("." * statement.level)
+                    + statement.module
+                    + "."
+                    + alias.name
+                )
                 if alias.asname is None:
-                    potential_aliases[alias.name].append(
-                        statement.module + "." + alias.name
-                    )
+                    potential_aliases[alias.name].append(fullname)
                 else:
-                    potential_aliases[alias.asname].append(
-                        statement.module + "." + alias.name
-                    )
+                    potential_aliases[alias.asname].append(fullname)
         else:
             raise KeyError(f"{statement} cannot be analyzed.")
+
+    for statement in assignments:
+        if isinstance(statement.value, ast.Name) or isinstance(
+            statement.value, ast.Attribute
+        ):
+            value_identifier = _build_node_identifier(statement.value)
+            if len(statement.targets) == 1:
+                target = statement.targets[0]
+                potential_aliases[target.id] += potential_aliases.get(
+                    value_identifier, [value_identifier]
+                )
 
     return {
         alias: fullnames[0]
