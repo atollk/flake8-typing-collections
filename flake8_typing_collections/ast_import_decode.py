@@ -80,9 +80,7 @@ def _build_node_identifier(node: Union[ast.Name, ast.Attribute]) -> str:
     elif isinstance(node, ast.Attribute):
         return _build_node_identifier(node.value) + "." + node.attr
     else:
-        raise TypeError(
-            "Can only decode nodes of type ast.Name and ast.Attribute."
-        )
+        raise TypeError("Can only decode nodes of type ast.Name and ast.Attribute.")
 
 
 def _ast_ancestors(tree: ast.AST, node: ast.AST) -> List[ast.AST]:
@@ -152,12 +150,7 @@ def _analyze(statements: Sequence[ast.AST]) -> Dict[str, str]:
                     potential_aliases[alias.asname].append(alias.name)
         elif isinstance(statement, ast.ImportFrom):
             for alias in statement.names:
-                fullname = (
-                    ("." * statement.level)
-                    + statement.module
-                    + "."
-                    + alias.name
-                )
+                fullname = ("." * statement.level) + statement.module + "." + alias.name
                 if alias.asname is None:
                     potential_aliases[alias.name].append(fullname)
                 else:
@@ -169,10 +162,13 @@ def _analyze(statements: Sequence[ast.AST]) -> Dict[str, str]:
         if isinstance(statement.value, ast.Name) or isinstance(
             statement.value, ast.Attribute
         ):
-            value_identifier = _build_node_identifier(statement.value)
             if len(statement.targets) == 1:
-                target = statement.targets[0]
-                potential_aliases[target.id] += potential_aliases.get(
+                try:
+                    value_identifier = _build_node_identifier(statement.value)
+                    target = _build_node_identifier(statement.targets[0])
+                except TypeError:
+                    continue
+                potential_aliases[target] += potential_aliases.get(
                     value_identifier, [value_identifier]
                 )
 

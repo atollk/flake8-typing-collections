@@ -2,11 +2,9 @@ from tests.util import BaseTest
 
 
 class Test_TYCO110(BaseTest):
-    def error_code(self) -> str:
-        return "TYCO110"
-
-    def activate_flag(self) -> str:
-        return "--tyco_generic_alt"
+    @classmethod
+    def flags(cls):
+        return ["--tyco_generic_alt"]
 
     def test_pass_1(self):
         code = """

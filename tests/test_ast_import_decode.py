@@ -174,3 +174,20 @@ def test_relative_imports():
     name2 = decode(tree, node2)
     assert name1 == ".foo.X"
     assert name2 == "..bar.Y"
+
+
+CODE_NONTRIVIAL_ASSIGN = """
+i[j] = foo
+a(b).c = d
+x.y = z
+"""
+
+
+def test_nontrivial_assign():
+    tree = ast.parse(CODE_NONTRIVIAL_ASSIGN)
+    node1 = tree.body[0].targets[0]
+    node2 = tree.body[1].targets[0]
+    node3 = tree.body[2].targets[0]
+    decode(tree, node1.value)
+    decode(tree, node2.value.func)
+    decode(tree, node3)

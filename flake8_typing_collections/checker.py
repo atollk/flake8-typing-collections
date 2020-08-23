@@ -188,24 +188,17 @@ class Checker:
     def _use_better_alternative(
         self, type_hint: ast.AST, error_code: int
     ) -> Iterable[Tuple[int, int, str, type]]:
-        if (
-            (
-                error_code in ERROR_CODES_GENERIC_ALT
-                and not self.flags.generic_alt
-            )
-            or (
-                error_code in ERROR_CODES_ALIAS_ALT and not self.flags.alias_alt
-            )
-            or (
-                error_code in ERROR_CODES_GENERAL_ARGS
-                and not self.flags.general_args
-            )
-        ):
+        if error_code in ERROR_CODES_GENERIC_ALT and not self.flags.generic_alt:
+            return []
+        if error_code in ERROR_CODES_ALIAS_ALT and not self.flags.alias_alt:
+            return []
+        if error_code in ERROR_CODES_GENERAL_ARGS and not self.flags.general_args:
             return []
 
-        if isinstance(type_hint, ast.Name) or isinstance(
-            type_hint, ast.Attribute
-        ):
+        while isinstance(type_hint, ast.Subscript):
+            type_hint = type_hint.value
+
+        if isinstance(type_hint, ast.Name) or isinstance(type_hint, ast.Attribute):
             if (
                 ast_import_decode.decode(self.tree, type_hint)
                 in BETTER_ALTERNATIVES[error_code]
