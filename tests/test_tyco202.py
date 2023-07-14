@@ -31,4 +31,4 @@ class Test_TYC202(BaseTest):
             ...
         """
         result = self.run_flake8(code)
-        self.assert_error_at(result, "TYC202", 2, 12)
+        self.assert_error_at(result, "TYC202", 3, 12)

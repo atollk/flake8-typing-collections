@@ -27,13 +27,13 @@ class TestNestedTypes(BaseTest):
 
     def test_nested_outer(self):
         errors = self.run_flake8(CODE_NESTED_OUTER)
-        self.assert_error_at(errors, "TYC115", 1, 12)
+        self.assert_error_at(errors, "TYC115", 2, 12)
 
     def test_nested_inner(self):
         errors = self.run_flake8(CODE_NESTED_INNER)
-        self.assert_error_at(errors, "TYC115", 2, 30)
+        self.assert_error_at(errors, "TYC115", 3, 30)
 
     def test_nested_2xx(self):
         errors = self.run_flake8(CODE_NESTED_2XX)
-        self.assert_error_at(errors, "TYC200", 2, 12)
+        self.assert_error_at(errors, "TYC200", 3, 12)
         assert len(errors) == 1, str(errors)

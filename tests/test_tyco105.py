@@ -22,7 +22,7 @@ class Test_TYC105(BaseTest):
             ...
         """
         result = self.run_flake8(code)
-        self.assert_error_at(result, "TYC105", 2, 12)
+        self.assert_error_at(result, "TYC105", 3, 12)
 
     def test_fail_2(self):
         code = """
@@ -31,4 +31,4 @@ class Test_TYC105(BaseTest):
             ...
         """
         result = self.run_flake8(code)
-        self.assert_error_at(result, "TYC105", 2, 15)
+        self.assert_error_at(result, "TYC105", 3, 15)

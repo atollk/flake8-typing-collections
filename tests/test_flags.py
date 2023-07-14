@@ -19,9 +19,9 @@ class TestFlags_1(BaseTest):
 
     def test_flags(self):
         errors = self.run_flake8(CODE)
-        assert self.error_at(errors, "TYC100", 3, 12)
-        assert not self.error_at(errors, "TYC105", 3, 25)
-        assert not self.error_at(errors, "TYC202", 3, 35)
+        assert self.error_at(errors, "TYC100", 4, 12)
+        assert not self.error_at(errors, "TYC105", 4, 25)
+        assert not self.error_at(errors, "TYC202", 4, 35)
 
 
 class TestFlags_2(BaseTest):
@@ -31,9 +31,9 @@ class TestFlags_2(BaseTest):
 
     def test_flags(self):
         errors = self.run_flake8(CODE)
-        assert not self.error_at(errors, "TYC100", 3, 12)
-        assert self.error_at(errors, "TYC105", 3, 25)
-        assert not self.error_at(errors, "TYC202", 3, 35)
+        assert not self.error_at(errors, "TYC100", 4, 12)
+        assert self.error_at(errors, "TYC105", 4, 25)
+        assert not self.error_at(errors, "TYC202", 4, 35)
 
 
 class TestFlags_3(BaseTest):
@@ -43,9 +43,9 @@ class TestFlags_3(BaseTest):
 
     def test_flags(self):
         errors = self.run_flake8(CODE)
-        assert not self.error_at(errors, "TYC100", 3, 12)
-        assert not self.error_at(errors, "TYC105", 3, 25)
-        assert self.error_at(errors, "TYC202", 3, 35)
+        assert not self.error_at(errors, "TYC100", 4, 12)
+        assert not self.error_at(errors, "TYC105", 4, 25)
+        assert self.error_at(errors, "TYC202", 4, 35)
 
 
 class TestFlags_4(BaseTest):
@@ -55,9 +55,9 @@ class TestFlags_4(BaseTest):
 
     def test_flags(self):
         errors = self.run_flake8(CODE)
-        assert not self.error_at(errors, "TYC100", 3, 12)
-        assert self.error_at(errors, "TYC105", 3, 25)
-        assert self.error_at(errors, "TYC202", 3, 35)
+        assert not self.error_at(errors, "TYC100", 4, 12)
+        assert self.error_at(errors, "TYC105", 4, 25)
+        assert self.error_at(errors, "TYC202", 4, 35)
 
 
 class TestFlags_5(BaseTest):
@@ -67,9 +67,9 @@ class TestFlags_5(BaseTest):
 
     def test_flags(self):
         errors = self.run_flake8(CODE)
-        assert self.error_at(errors, "TYC100", 3, 12)
-        assert not self.error_at(errors, "TYC105", 3, 25)
-        assert self.error_at(errors, "TYC202", 3, 35)
+        assert self.error_at(errors, "TYC100", 4, 12)
+        assert not self.error_at(errors, "TYC105", 4, 25)
+        assert self.error_at(errors, "TYC202", 4, 35)
 
 
 class TestFlags_6(BaseTest):
@@ -79,9 +79,9 @@ class TestFlags_6(BaseTest):
 
     def test_flags(self):
         errors = self.run_flake8(CODE)
-        assert self.error_at(errors, "TYC100", 3, 12)
-        assert self.error_at(errors, "TYC105", 3, 25)
-        assert not self.error_at(errors, "TYC202", 3, 35)
+        assert self.error_at(errors, "TYC100", 4, 12)
+        assert self.error_at(errors, "TYC105", 4, 25)
+        assert not self.error_at(errors, "TYC202", 4, 35)
 
 
 class TestFlags_7(BaseTest):
@@ -91,6 +91,6 @@ class TestFlags_7(BaseTest):
 
     def test_flags(self):
         errors = self.run_flake8(CODE)
-        assert self.error_at(errors, "TYC100", 3, 12)
-        assert self.error_at(errors, "TYC105", 3, 25)
-        assert self.error_at(errors, "TYC202", 3, 35)
+        assert self.error_at(errors, "TYC100", 4, 12)
+        assert self.error_at(errors, "TYC105", 4, 25)
+        assert self.error_at(errors, "TYC202", 4, 35)
