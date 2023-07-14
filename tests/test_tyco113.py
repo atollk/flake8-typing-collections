@@ -1,10 +1,10 @@
 from tests.util import BaseTest
 
 
-class Test_TYCO113(BaseTest):
+class Test_TYC113(BaseTest):
     @classmethod
     def flags(cls):
-        return ["--tyco_alias_alt"]
+        return ["--tyc_alias_alt"]
 
     def test_pass_1(self):
         code = """
@@ -21,7 +21,7 @@ class Test_TYCO113(BaseTest):
             ...
         """
         result = self.run_flake8(code)
-        self.assert_error_at(result, "TYCO113", 1, 12)
+        self.assert_error_at(result, "TYC113", 2, 12)
 
     def test_fail_2(self):
         code = """
@@ -29,4 +29,4 @@ class Test_TYCO113(BaseTest):
             ...
         """
         result = self.run_flake8(code)
-        self.assert_error_at(result, "TYCO113", 1, 15)
+        self.assert_error_at(result, "TYC113", 2, 15)

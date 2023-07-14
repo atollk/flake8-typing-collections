@@ -116,17 +116,17 @@ class Checker:
     @staticmethod
     def add_options(option_manager: flake8.options.manager.OptionManager):
         option_manager.add_option(
-            "--tyco_generic_alt",
+            "--tyc_generic_alt",
             action="store_true",
             help="Activate errors about generic type versions. See README.md for details.",
         )
         option_manager.add_option(
-            "--tyco_alias_alt",
+            "--tyc_alias_alt",
             action="store_true",
             help="Activate errors about alias type versions. See README.md for details.",
         )
         option_manager.add_option(
-            "--tyco_general_args",
+            "--tyc_general_args",
             action="store_true",
             help="Activate errors about more general types in function parameters. See README.md for details.",
         )
@@ -138,9 +138,9 @@ class Checker:
         options: argparse.Namespace,
         extra_args,
     ):
-        cls.flags.generic_alt = options.tyco_generic_alt
-        cls.flags.alias_alt = options.tyco_alias_alt
-        cls.flags.general_args = options.tyco_general_args
+        cls.flags.generic_alt = options.tyc_generic_alt
+        cls.flags.alias_alt = options.tyc_alias_alt
+        cls.flags.general_args = options.tyc_general_args
         if not any(dataclasses.asdict(cls.flags).values()):
             cls.flags = DEFAULT_FLAGS
 
@@ -206,7 +206,7 @@ class Checker:
                 yield (
                     type_hint.lineno,
                     type_hint.col_offset,
-                    f"TYCO{error_code} " + ERROR_MESSAGES[error_code],
+                    f"TYC{error_code} " + ERROR_MESSAGES[error_code],
                     Checker,
                 )
 
