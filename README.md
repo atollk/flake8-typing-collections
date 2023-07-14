@@ -8,20 +8,20 @@ the `collections` module.
 The plugin offers the following flags to select which errors to enable.
 All errors that are not explicitly enabled, are not reported.
 
-* `--tyco_generic_alt`: Enables `TYCO101`, `TYCO102`, `TYCO103`, `TYCO106`, 
-`TYCO107`, `TYCO108`, `TYCO109`, `TYCO110`, `TYCO111`, `TYCO112`, `TYCO114`, 
-`TYCO115`, `TYCO116`, `TYCO117`, `TYCO118`, `TYCO119`, `TYCO120`, `TYCO121`, 
-`TYCO122`, `TYCO123`, `TYCO124`, `TYCO125`, `TYCO126`, `TYCO127`, `TYCO128`,
-`TYCO129`, `TYCO130`, `TYCO131`, and `TYCO132`. 
-* `--tyco_alias_alt`: Enables `TYCO104`, `TYCO105`, and `TYCO113`.
-* `--tyco_general_args`: Enables `TYCO200`, `TYCO201`, and `TYCO202`.
+* `--tyc_generic_alt`: Enables `TYC101`, `TYC102`, `TYC103`, `TYC106`, 
+`TYC107`, `TYC108`, `TYC109`, `TYC110`, `TYC111`, `TYC112`, `TYC114`, 
+`TYC115`, `TYC116`, `TYC117`, `TYC118`, `TYC119`, `TYC120`, `TYC121`, 
+`TYC122`, `TYC123`, `TYC124`, `TYC125`, `TYC126`, `TYC127`, `TYC128`,
+`TYC129`, `TYC130`, `TYC131`, and `TYC132`. 
+* `--tyc_alias_alt`: Enables `TYC104`, `TYC105`, and `TYC113`.
+* `--tyc_general_args`: Enables `TYC200`, `TYC201`, and `TYC202`.
 
 If none of these flags is given, the default selection is used instead,
-which is `--tyco_generic_alt` and `--tyco_general_args`.
+which is `--tyc_generic_alt` and `--tyc_general_args`.
 
 ## Error Codes
 
-## TYCO1xx class
+## TYC1xx class
 
 The `typing` module defines several generic versions of built-in
 classes, such as `typing.List[T]` instead of `list`. Their usage
@@ -37,167 +37,167 @@ def sum_list(x: list) -> float:
     ...
 ```
 
-### TYCO100
+### TYC100
 
 Use `typing.Iterable` instead of `collections.abc.Iterable` for type annotations.
 
 
-### TYCO101
+### TYC101
 
 Use `typing.Iterator` instead of `collections.abc.Iterator` for type annotations.
 
 
-### TYCO102
+### TYC102
 
 Use `typing.Reversible` instead of `collections.abc.Reversible` for type annotations.
 
 
-### TYCO103
+### TYC103
 
 Use `typing.Container` instead of `collections.abc.Container` for type annotations.
 
 
-### TYCO104
+### TYC104
 
 Use `typing.Hashable` instead of `collections.abc.Hashable` for type annotations.
 
 
-### TYCO105
+### TYC105
 
 Use `typing.Sized` instead of `collections.abc.Sized` for type annotations.
 
 
-### TYCO106
+### TYC106
 
 Use `typing.Collection` instead of `collections.abc.Collection` for type annotations.
 
 
-### TYCO107
+### TYC107
 
 Use `typing.AbstractSet` instead of `collections.abc.Set` for type annotations.
 
 
-### TYCO108
+### TYC108
 
 Use `typing.MutableSet` instead of `collections.abc.MutableSet` for type annotations.
 
 
-### TYCO109
+### TYC109
 
 Use `typing.Mapping` instead of `collections.abc.Mapping` for type annotations.
 
 
-### TYCO110
+### TYC110
 
 Use `typing.MutableMapping` instead of `collections.abc.MutableMapping` for type annotations.
 
 
-### TYCO111
+### TYC111
 
 Use `typing.Sequence` instead of `collections.abc.Sequence` for type annotations.
 
 
-### TYCO112
+### TYC112
 
 Use `typing.MutableSequence` instead of `collections.abc.MutableSequence` for type annotations.
 
 
-### TYCO113
+### TYC113
 
 Use `typing.ByteString` instead of `bytes` for type annotations.
 
 
-### TYCO114
+### TYC114
 
 Use `typing.Deque` instead of `collections.Deque` for type annotations.
 
 
-### TYCO115
+### TYC115
 
 Use `typing.List` instead of `list` for type annotations.
 
 
-### TYCO116
+### TYC116
 
 Use `typing.Set` instead of `set` for type annotations.
 
 
-### TYCO117
+### TYC117
 
 Use `typing.FrozenSet` instead of `frozenset` for type annotations.
 
 
-### TYCO118
+### TYC118
 
 Use `typing.MappingView` instead of `collections.abc.MappingView` for type annotations.
 
 
-### TYCO119
+### TYC119
 
 Use `typing.KeysView` instead of `collections.abc.KeysView` for type annotations.
 
 
-### TYCO120
+### TYC120
 
 Use `typing.ItemsView` instead of `collections.abc.ItemsView` for type annotations.
 
 
-### TYCO121
+### TYC121
 
 Use `typing.ValuesView` instead of `collections.abc.ValuesView` for type annotations.
 
 
-### TYCO122
+### TYC122
 
 Use `typing.Awaitable` instead of `collections.abc.Awaitable` for type annotations.
 
 
-### TYCO123
+### TYC123
 
 Use `typing.Coroutine` instead of `collections.abc.Coroutine` for type annotations.
 
 
-### TYCO124
+### TYC124
 
 Use `typing.AsyncIterable` instead of `collections.abc.AsyncIterable` for type annotations.
 
 
-### TYCO125
+### TYC125
 
 Use `typing.AsyncIterator` instead of `collections.abc.AsyncIterator` for type annotations.
 
 
-### TYCO126
+### TYC126
 
 Use `typing.ContextManager` instead of `contextlib.AbstractContextManager` for type annotations.
 
 
-### TYCO127
+### TYC127
 
 Use `typing.AsyncContextManager` instead of `contextlib.AbstractAsyncContextManager` for type annotations.
 
 
-### TYCO128
+### TYC128
 
 Use `typing.Dict` instead of `dict` for type annotations.
 
 
-### TYCO129
+### TYC129
 
 Use `typing.DefaultDict` instead of `collections.defaultdict` for type annotations.
 
 
-### TYCO130
+### TYC130
 
 Use `typing.OrderedDict` instead of `collections.OrderedDict` for type annotations.
 
 
-### TYCO131
+### TYC131
 
 Use `typing.Counter` instead of `collections.Counter` for type annotations.
 
 
-### TYCO132
+### TYC132
 
 Use `typing.ChainMap` instead of `collections.ChainMap` for type annotations.
 
@@ -206,7 +206,7 @@ Use `typing.ChainMap` instead of `collections.ChainMap` for type annotations.
 
 
 
-## TYCO2xx class
+## TYC2xx class
 
 The documentation of the `typing` module recommends to use
 more general types such as `typing.Sequence` over specialized
@@ -222,17 +222,17 @@ def sum_list(x: List[int]) -> int:
     ...
 ```
 
-### TYCO200
+### TYC200
 
 Use `typing.Sequence` or `typing.MutableSequence`
 instead of `typing.List` in function arguments.
 
-### TYCO201
+### TYC201
 
 Use `typing.AbstractSet` or `typing.MutableSet`
 instead of `typing.Set` in function arguments.
 
-### TYCO201
+### TYC201
 
 Use `typing.Mapping` or `typing.MutableMapping`
 instead of `typing.Dict` in function arguments.

@@ -35,7 +35,7 @@ class BaseTest(abc.ABC):
         args = self.flags()
         result = self.flake8dir.run_flake8(args)
         all_errors = [ReportedMessage.from_raw(report) for report in result.out_lines]
-        return [err for err in all_errors if err.code.startswith("TYCO")]
+        return [err for err in all_errors if err.code.startswith("TYC")]
 
     def assert_error_at(
         self,

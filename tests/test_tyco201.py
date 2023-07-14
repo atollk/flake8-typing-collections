@@ -1,10 +1,10 @@
 from tests.util import BaseTest
 
 
-class Test_TYCO201(BaseTest):
+class Test_TYC201(BaseTest):
     @classmethod
     def flags(cls):
-        return ["--tyco_general_args"]
+        return ["--tyc_general_args"]
 
     def test_pass_1(self):
         code = """
@@ -31,4 +31,4 @@ class Test_TYCO201(BaseTest):
             ...
         """
         result = self.run_flake8(code)
-        self.assert_error_at(result, "TYCO201", 2, 12)
+        self.assert_error_at(result, "TYC201", 2, 12)
