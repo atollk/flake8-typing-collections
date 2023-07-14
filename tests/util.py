@@ -27,13 +27,13 @@ class BaseTest(abc.ABC):
         return []
 
     @pytest.fixture(autouse=True)
-    def _flake8dir(self, flake8dir):
-        self.flake8dir = flake8dir
+    def _flake8dir(self, flake8_path):
+        self.flake8_path = flake8_path
 
     def run_flake8(self, code: str) -> List[ReportedMessage]:
-        self.flake8dir.make_example_py(textwrap.dedent(code))
+        (self.flake8_path / "example.py").write_text(textwrap.dedent(code))
         args = self.flags()
-        result = self.flake8dir.run_flake8(args)
+        result = self.flake8_path.run_flake8(args)
         all_errors = [ReportedMessage.from_raw(report) for report in result.out_lines]
         return [err for err in all_errors if err.code.startswith("TYC")]
 
