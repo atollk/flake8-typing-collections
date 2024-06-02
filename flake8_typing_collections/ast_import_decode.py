@@ -80,7 +80,9 @@ def _build_node_identifier(node: Union[ast.Name, ast.Attribute]) -> str:
     elif isinstance(node, ast.Attribute):
         return _build_node_identifier(node.value) + "." + node.attr
     else:
-        raise TypeError("Can only decode nodes of type ast.Name and ast.Attribute.")
+        raise TypeError(
+            "Can only decode nodes of type ast.Name and ast.Attribute."
+        )
 
 
 def _ast_ancestors(tree: ast.AST, node: ast.AST) -> List[ast.AST]:
@@ -151,7 +153,12 @@ def _analyze(statements: Sequence[ast.AST]) -> Dict[str, str]:
         elif isinstance(statement, ast.ImportFrom):
             for alias in statement.names:
                 if statement.module is not None:
-                    fullname = ("." * statement.level) + statement.module + "." + alias.name
+                    fullname = (
+                        ("." * statement.level)
+                        + statement.module
+                        + "."
+                        + alias.name
+                    )
                 else:
                     fullname = ("." * statement.level) + alias.name
                 if alias.asname is None:
