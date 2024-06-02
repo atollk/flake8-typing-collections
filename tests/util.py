@@ -34,7 +34,9 @@ class BaseTest(abc.ABC):
         (self.flake8_path / "example.py").write_text(textwrap.dedent(code))
         args = self.flags()
         result = self.flake8_path.run_flake8(args)
-        all_errors = [ReportedMessage.from_raw(report) for report in result.out_lines]
+        all_errors = [
+            ReportedMessage.from_raw(report) for report in result.out_lines
+        ]
         return [err for err in all_errors if err.code.startswith("TYC")]
 
     def assert_error_at(
@@ -56,6 +58,8 @@ class BaseTest(abc.ABC):
         col: int,
     ) -> bool:
         return any(
-            report.line == line and report.col == col and report.code == error_code
+            report.line == line
+            and report.col == col
+            and report.code == error_code
             for report in reported_errors
         )
