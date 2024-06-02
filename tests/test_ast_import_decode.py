@@ -161,19 +161,24 @@ def test_assignment():
 CODE_RELATIVE_IMPORTS = """
 from .foo import X
 from ..bar import Y
+from . import Z
 X
 Y
+Z
 """
 
 
 def test_relative_imports():
     tree = ast.parse(CODE_RELATIVE_IMPORTS)
-    node1 = tree.body[2].value
-    node2 = tree.body[3].value
+    node1 = tree.body[3].value
+    node2 = tree.body[4].value
+    node3 = tree.body[5].value
     name1 = decode(tree, node1)
     name2 = decode(tree, node2)
+    name3 = decode(tree, node3)
     assert name1 == ".foo.X"
     assert name2 == "..bar.Y"
+    assert name3 == ".Z"
 
 
 CODE_NONTRIVIAL_ASSIGN = """

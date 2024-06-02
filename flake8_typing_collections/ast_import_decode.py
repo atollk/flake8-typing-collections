@@ -150,7 +150,10 @@ def _analyze(statements: Sequence[ast.AST]) -> Dict[str, str]:
                     potential_aliases[alias.asname].append(alias.name)
         elif isinstance(statement, ast.ImportFrom):
             for alias in statement.names:
-                fullname = ("." * statement.level) + statement.module + "." + alias.name
+                if statement.module is not None:
+                    fullname = ("." * statement.level) + statement.module + "." + alias.name
+                else:
+                    fullname = ("." * statement.level) + alias.name
                 if alias.asname is None:
                     potential_aliases[alias.name].append(fullname)
                 else:
